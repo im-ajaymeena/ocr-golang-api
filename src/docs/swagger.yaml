@@ -1,0 +1,113 @@
+definitions:
+  api.AsyncTextResponse:
+    properties:
+      task_id:
+        type: string
+    type: object
+  api.Base64Response:
+    properties:
+      base64:
+        type: string
+    type: object
+  api.ImageRequest:
+    properties:
+      image_data:
+        description: For single image
+        type: string
+      image_data_list:
+        description: For list of images
+        items:
+          type: string
+        type: array
+    type: object
+  api.SyncTextResponse:
+    properties:
+      text:
+        type: string
+    type: object
+  api.TaskIDMessage:
+    properties:
+      task_id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /image:
+    get:
+      description: Retuns result for the task given task_id.
+      parameters:
+      - description: Task ID
+        in: query
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.AsyncTextResponse'
+      summary: Retuns result for the task given task_id.
+      tags:
+      - OCR
+    post:
+      description: Create background task for (OCR) on an image return task_id.
+      parameters:
+      - description: Image data
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/api.ImageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.TaskIDMessage'
+      summary: Create background task for (OCR) on an image return task_id.
+      tags:
+      - OCR
+  /image-sync:
+    post:
+      description: Perform optical character recognition (OCR) on an image.
+      parameters:
+      - description: Image data
+        in: body
+        name: request
+        schema:
+          $ref: '#/definitions/api.ImageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SyncTextResponse'
+      summary: Perform OCR on an image, return text.
+      tags:
+      - OCR
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image and returns its base64 representation.
+      parameters:
+      - description: Image file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Base64Response'
+      summary: Get base64 representation
+      tags:
+      - utils
+swagger: "2.0"

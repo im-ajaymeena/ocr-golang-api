@@ -1,0 +1,177 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/image": {
+            "get": {
+                "description": "Retuns result for the task given task_id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OCR"
+                ],
+                "summary": "Retuns result for the task given task_id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "task_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.AsyncTextResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create background task for (OCR) on an image return task_id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OCR"
+                ],
+                "summary": "Create background task for (OCR) on an image return task_id.",
+                "parameters": [
+                    {
+                        "description": "Image data",
+                        "name": "request",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/api.ImageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.TaskIDMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/image-sync": {
+            "post": {
+                "description": "Perform optical character recognition (OCR) on an image.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OCR"
+                ],
+                "summary": "Perform OCR on an image, return text.",
+                "parameters": [
+                    {
+                        "description": "Image data",
+                        "name": "request",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/api.ImageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.SyncTextResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "description": "Uploads an image and returns its base64 representation.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "utils"
+                ],
+                "summary": "Get base64 representation",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Image file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Base64Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.AsyncTextResponse": {
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Base64Response": {
+            "type": "object",
+            "properties": {
+                "base64": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.ImageRequest": {
+            "type": "object",
+            "properties": {
+                "image_data": {
+                    "description": "For single image",
+                    "type": "string"
+                },
+                "image_data_list": {
+                    "description": "For list of images",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "api.SyncTextResponse": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.TaskIDMessage": {
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

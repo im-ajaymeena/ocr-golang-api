@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    platform: linux/x86_64
+    build:
+      context: .
+      target: dev
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/go/src/
+    # command: air ./cmd/main.go -b 0.0.0.0
+    environment:
+      - PORT=5000
+      - SERVER_URL=http://localhost:5000/
+      - REDIS_SERVER_URL=redis:6379
+      - NUM_TASK_WORKERS=3
+      - MAX_BUFFERED_TASK=10
+    depends_on:
+      - redis
+  
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
