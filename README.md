@@ -21,7 +21,7 @@ APIs can be tested with the swagger UI endpoint
 
 ## List of APIs (Description and Usage)
 
-### 1. OCRSynchronous
+### OCRSynchronous
 
 Perform OCR on an image synchronously and return the recognized text.
 
